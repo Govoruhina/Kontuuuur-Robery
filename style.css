@@ -2,10 +2,13 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  height: 100vh;
+  overscroll-behavior: none;
 }
 
 html {
   scroll-behavior: auto;
+  height: 100%;
 }
 
 input[type="text"] {
@@ -77,8 +80,8 @@ section {
 
 .level {
   display: none;
-  position: absolute;
-  inset: 0;
+  
+  
   overflow-y: auto;
   padding: 20px;
   box-sizing: border-box;
@@ -100,7 +103,7 @@ button.start-btn, button.restart-btn {
 }
 
 button.pass-btn, button.last-btn {
-  position: absolute;
+  
   right: 20px;
   bottom: 20px;
   padding: 10px 20px;

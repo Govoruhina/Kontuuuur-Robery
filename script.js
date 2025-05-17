@@ -137,7 +137,9 @@ function unlockNext(currentLevel) {
   const nextLevel = document.getElementById(nextId);
   if (nextLevel) {
     nextLevel.classList.remove('locked');
-    showLevel(nextId); // показать только нужную секцию
+    showLevel(nextId);
+    const offsetTop = document.getElementById(nextId).offsetTop;
+    smoothScrollTo(offsetTop, scrollDuration); // показать только нужную секцию
   }
 
   if (currentLevel === 1) loadLevel2();
