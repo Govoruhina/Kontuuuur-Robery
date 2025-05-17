@@ -76,8 +76,20 @@ section {
 }
 
 .level {
+  display: none;
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
   padding: 20px;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.level.active {
+  display: flex;
 }
 
 button.start-btn, button.restart-btn {

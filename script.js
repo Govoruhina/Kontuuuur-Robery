@@ -19,19 +19,27 @@ function smoothScrollTo(targetY, duration) {
   requestAnimationFrame(scrollStep);
 }
 
+function showLevel(id) {
+  const levels = document.querySelectorAll('.level');
+  levels.forEach(level => level.classList.remove('active'));
+
+  const target = document.getElementById(id);
+  if (target) {
+    target.classList.add('active');
+  }
+}
+
+
 function easeInOutCubic(t) {
   return t < 0.5
     ? 4 * t * t * t
     : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
-function startGame() { // старт игры
-  const intro = document.getElementById('intro');
-  intro.style.display = 'none';
-
-  const level1 = document.getElementById('level1');
-  level1.classList.remove('locked'); // разблокируем уровень 1
-  level1.scrollIntoView({ behavior: 'smooth' });
+function startGame() {
+  document.getElementById('intro').style.display = 'none';
+  document.getElementById('level1').classList.remove('locked');
+  showLevel('level1');
 }
 
 function checkLevel1() {
@@ -129,14 +137,12 @@ function unlockNext(currentLevel) {
   const nextLevel = document.getElementById(nextId);
   if (nextLevel) {
     nextLevel.classList.remove('locked');
-
-    // Загрузка задания уровня 2
-    if (currentLevel === 1) loadLevel2();
-
-    const offsetTop = nextLevel.offsetTop;
-    smoothScrollTo(offsetTop, scrollDuration);
+    showLevel(nextId); // показать только нужную секцию
   }
+
+  if (currentLevel === 1) loadLevel2();
 }
+
 
 
 function restartGame() {
