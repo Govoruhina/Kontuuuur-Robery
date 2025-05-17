@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Хакерская игра Контура</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header id="intro"> <!-- // первый экран -->
+    <h1>Хакерская игра Контура</h1>
+    <p>Проверь свои навыки в программировании и безопасности!</p>
+    <button class="start-btn" onclick="startGame()">Начать игру</button>
+  </header>
+
+  
+  <section id="level1" class="level"> <!-- первый уровень -->
+    <h2>Уровень 1: Взлом входа</h2>
+    <p>Реши задачу: 30-е число Фибоначчи</p>
+    <button class="pass-btn" onclick="unlockNext(1)">Пройдено</button>
+  </section>
+
+  <section id="level2" class="level locked"> <!-- второй уровень -->
+    <h2>Уровень 2: Шифр Цезаря</h2>
+    <p>Расшифруй: Zrffntr vf serr (ROT13)</p>
+    <button class="pass-btn" onclick="unlockNext(2)">Пройдено</button>
+  </section>
+
+  <section id="level3" class="level locked"> <!-- третий уровень -->
+    <h2>Уровень 3: Ошибка в коде</h2>
+    <p>Найди логическую ошибку в псевдокоде Python.</p>
+    <button class="last-btn" onclick="unlockNext(3)">Финиш</button>
+  </section>
+
+  <section id="end"> <!-- экран завершения игры -->
+    <h2>Game Over!</h2>
+    <p>Nice to see you! Bye bye)))</p>
+    <button class="restart-btn" onclick="restartGame()">Пройти заново</button>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
