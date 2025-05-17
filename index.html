@@ -35,11 +35,30 @@
 </section>
 
 
-  <section id="level3" class="level locked"> <!-- третий уровень -->
-    <h2>Уровень 3: Ошибка в коде</h2>
-    <p>Найди логическую ошибку в псевдокоде Python.</p>
-    <button class="last-btn" onclick="unlockNext(3)">Финиш</button>
-  </section>
+<section id="level3" class="level locked">
+  <h2>Уровень 3: Найди ошибку в коде</h2>
+
+  <pre class="code-block">
+using System;
+
+class AlmostSecret
+{
+    static void FindSecretData()
+    {
+        int[] data = { 5, 3, 8, 1 };
+        // здесь чего-то не хватает...
+        int index = BinarySearch(data, 8);
+        Console.WriteLine(index);
+    }
+}
+  </pre>
+
+  <p>Что нужно вставить в строку с комментарием, чтобы программа работала?</p>
+  <input type="text" id="fix-input" placeholder="Введите исправление">
+  <button class="check-btn" onclick="checkLevel3()">Проверить</button>
+  <div id="fix-feedback" class="feedback"></div>
+</section>
+
 
   <section id="end"> <!-- экран завершения игры -->
     <h2>Game Over!</h2>

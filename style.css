@@ -38,6 +38,19 @@ button.check-btn {
   color: #dc3545;
 }
 
+.code-block {
+  background-color: #1e1e1e;
+  color: #dcdcdc;
+  padding: 15px;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.95rem;
+  width: 90%;
+  max-width: 700px;
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+
 
 header {
   height: 100vh;
@@ -88,4 +101,50 @@ button.pass-btn, button.last-btn {
 .locked {
   pointer-events: none;
   opacity: 0.2;
+}
+
+
+/* ======= Мобильная адаптация ======= */
+@media screen and (max-width: 600px) {
+  h2 {
+    font-size: 1.3rem;
+    text-align: center;
+  }
+
+  .code-block {
+    font-size: 0.85rem;
+    width: 95%;
+  }
+
+  input[type="text"] {
+    width: 90%;
+    font-size: 1rem;
+  }
+
+  button {
+    width: auto;
+    font-size: 1rem;
+    padding: 12px 20px;
+  }
+
+  .feedback {
+    width: 90%;
+    font-size: 1rem;
+    margin-top: 12px;
+  }
+
+  section {
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  header {
+    padding: 10px;
+    box-sizing: border-box;
+    font-size: 1.3rem;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
 }

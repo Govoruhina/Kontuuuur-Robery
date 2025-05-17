@@ -103,6 +103,25 @@ function checkLevel2() {
   }
 }
 
+function checkLevel3() {
+  const input = document.getElementById('fix-input').value.trim();
+  const feedback = document.getElementById('fix-feedback');
+
+  const correct = "Array.Sort(data);";
+
+  if (input.replace(/\s/g, "") === correct.replace(/\s/g, "")) {
+    feedback.textContent = "✅ Верно! Массив нужно отсортировать перед бинарным поиском.";
+    feedback.classList.remove("error");
+    feedback.classList.add("success");
+    setTimeout(() => {
+      unlockNext(3);
+    }, 1000);
+  } else {
+    feedback.textContent = "❌ Неверно. Подумай, что нужно сделать с массивом.";
+    feedback.classList.remove("success");
+    feedback.classList.add("error");
+  }
+}
 
 
 function unlockNext(currentLevel) {
