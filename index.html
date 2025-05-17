@@ -9,24 +9,31 @@
 <body>
 
   <header id="intro"> <!-- // первый экран -->
-    <h1>Хакерская игра Контура +rfhnjh j</h1>
-    <img src="imges/chat_window.png" alt="Hacker Image" class="hacker-image">
+    <h1>Хакерская игра Контура</h1>
+    <img src="images/chat_window.png" alt="Hacker Image" class="hacker-image" width="300" height="200">
     <p>Проверь свои навыки в программировании и безопасности!</p>
     <button class="start-btn" onclick="startGame()">Начать игру</button>
   </header>
 
   
-  <section id="level1" class="level"> <!-- первый уровень -->
+  <section id="level1" class="level">
     <h2>Уровень 1: Взлом входа</h2>
-    <p>Реши задачу: 30-е число Фибоначчи</p>
-    <button class="pass-btn" onclick="unlockNext(1)">Пройдено</button>
+    <p>Реши задачу: какое 30-е число Фибоначчи?</p>
+    <input type="text" id="fib-input" placeholder="Введите число">
+    <button class="check-btn" onclick="checkLevel1()">Проверить</button>
+    <div id="fib-feedback" class="feedback"></div>
   </section>
 
-  <section id="level2" class="level locked"> <!-- второй уровень -->
-    <h2>Уровень 2: Шифр Цезаря</h2>
-    <p>Расшифруй: Zrffntr vf serr (ROT13)</p>
-    <button class="pass-btn" onclick="unlockNext(2)">Пройдено</button>
-  </section>
+
+  <section id="level2" class="level locked">
+    <h2>Уровень 2: Шифр Цезаря (ROT13)</h2>
+    <p>Cдвиг: каков ответ на главные вопросы жизни и вселенной, таков и ключ для самого известного метода шифрования в 26-тибуквенном алфавите (42 → 42-26=16)</p>
+    <p id="cipher-question">Загрузка задания...</p>
+    <input type="text" id="cipher-input" placeholder="Введите расшифровку">
+    <button class="check-btn" onclick="checkLevel2()">Проверить</button>
+    <div id="cipher-feedback" class="feedback"></div>
+</section>
+
 
   <section id="level3" class="level locked"> <!-- третий уровень -->
     <h2>Уровень 3: Ошибка в коде</h2>

@@ -34,15 +34,91 @@ function startGame() { // старт игры
   level1.scrollIntoView({ behavior: 'smooth' });
 }
 
+function checkLevel1() {
+  const input = document.getElementById('fib-input').value.trim();
+  const feedback = document.getElementById('fib-feedback');
+
+  if (input === "832040") {
+    feedback.textContent = "✅ Правильно! Доступ получен.";
+    feedback.classList.remove("error");
+    feedback.classList.add("success");
+
+    setTimeout(() => {
+      unlockNext(1);
+    }, 1000);
+  } else {
+    feedback.textContent = "❌ Неправильно. Попробуй ещё раз.";
+    feedback.classList.remove("success");
+    feedback.classList.add("error");
+  }
+}
+
+
+const cipherTasks = [
+  {
+    encoded: "Y'c q juqfej",
+    answer: "I'm a teapot"
+  },
+  {
+    encoded: "IjqsaEluhvbem",
+    answer: "StackOverFlow"
+  },
+  {
+    encoded: "Mxybu jhku",
+    answer: "While true"
+  },
+  {
+    encoded: "IodjqnUhheh",
+    answer: "SyntaxError"
+  }
+];
+
+let selectedTask2 = null;
+
+function loadLevel2() {
+  selectedTask2 = cipherTasks[Math.floor(Math.random() * cipherTasks.length)];
+  document.getElementById("cipher-question").textContent =
+    "Расшифруй: " + selectedTask2.encoded;
+  document.getElementById("cipher-feedback").textContent = "";
+  document.getElementById("cipher-feedback").className = "feedback";
+  document.getElementById("cipher-input").value = "";
+}
+
+function checkLevel2() {
+  const input = document.getElementById('cipher-input').value.trim();
+  const feedback = document.getElementById('cipher-feedback');
+  const correct = selectedTask2.answer.toLowerCase();
+
+  if (input.toLowerCase() === correct) {
+    feedback.textContent = "✅ Верно! Уровень пройден.";
+    feedback.classList.remove("error");
+    feedback.classList.add("success");
+    setTimeout(() => {
+      unlockNext(2);
+    }, 1000);
+  } else {
+    feedback.textContent = "❌ Неверно. Попробуй ещё.";
+    feedback.classList.remove("success");
+    feedback.classList.add("error");
+  }
+}
+
+
+
 function unlockNext(currentLevel) {
   const nextId = currentLevel === 3 ? 'end' : `level${currentLevel + 1}`;
   const nextLevel = document.getElementById(nextId);
   if (nextLevel) {
     nextLevel.classList.remove('locked');
+
+    // Загрузка задания уровня 2
+    if (currentLevel === 1) loadLevel2();
+
     const offsetTop = nextLevel.offsetTop;
-    smoothScrollTo(offsetTop, scrollDuration); // плавный скролл
+    smoothScrollTo(offsetTop, scrollDuration);
   }
 }
+
 
 function restartGame() {
   const intro = document.getElementById('intro');

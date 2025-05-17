@@ -8,6 +8,36 @@ html {
   scroll-behavior: auto;
 }
 
+input[type="text"] {
+  padding: 10px;
+  font-size: 1rem;
+  margin: 10px 0;
+  width: 250px;
+  text-align: center;
+}
+
+button.check-btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.feedback {
+  margin-top: 15px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ff4444;
+  text-align: center;
+}
+
+.feedback.success {
+  color: #28a745;
+}
+
+.feedback.error {
+  color: #dc3545;
+}
+
 
 header {
   height: 100vh;
