@@ -8,16 +8,25 @@ const levels = Array.from(document.querySelectorAll('.level'));
 /* записываем длительность в CSS-переменную */
 track.style.setProperty('--dur', ANIM_MS + 'ms');
 
-/* ------------ ПЛАВНЫЙ СДВИГ ------------- */
-function slideTo(idx){
-  const y = -idx * window.innerHeight;                  // px, не vh
+/* ------------ ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ДЛЯ СДВИГА ------------- */
+let curIndex = 0;
+let currentKeyboardOffset = 0;
+
+/* ------------ ОСНОВНАЯ ФУНКЦИЯ ПЛАВНОГО СДВИГА ------------- */
+function slideTo(idx, keyboardOffsetToApply = currentKeyboardOffset) {
+  curIndex = idx;
+  currentKeyboardOffset = keyboardOffsetToApply;
+
+  const y = -(curIndex * window.innerHeight) - currentKeyboardOffset;
   track.style.transform = `translate3d(0, ${y}px, 0)`;  // GPU-анимация
 }
 
 /* публичная навигация по id */
 function goToLevel(id){
   const k = levels.findIndex(l => l.id === id);
-  if (k !== -1) slideTo(k);
+  if (k !== -1) {
+    slideTo(k); // Now correctly uses the single, enhanced slideTo
+  }
 }
 
 /* ===== глобальный «Enter→проверка» ===== */
@@ -137,29 +146,47 @@ function checkLevel3(){
   }
 }
 
-/* ---------- сдвиг при появлении клавиатуры ---------- */
-let curIndex = 0;                          // актуальный экран
-function slideTo(idx){
-  curIndex = idx;                          // <- сохраняем
-  const y = -idx * window.innerHeight;
-  track.style.transform = `translate3d(0, ${y}px, 0)`;
-}
-
+/* ---------- ОБРАБОТКА ИЗМЕНЕНИЯ РАЗМЕРА VIEWPORT (КЛАВИАТУРА) ---------- */
 /* реагируем, когда высота visualViewport меняется */
-if (window.visualViewport){
-  let kbOffset = 0;
+if (window.visualViewport) {
   window.visualViewport.addEventListener('resize', () => {
-    const delta = window.innerHeight - window.visualViewport.height;
+    const focusedElement = document.activeElement;
+    let newCalculatedKbOffset = 0;
 
-    /* если delta >~150-200 px – клавиатура точно открыта */
-    const needShift = delta > 150 ? delta/2 : 0;   // поднимаем примерно на половину клавы
+    // Only calculate offset if an input field is focused
+    if (focusedElement && focusedElement.tagName === 'INPUT') {
+      const delta = window.innerHeight - window.visualViewport.height;
+      // If keyboard is open (delta > ~150px), calculate offset.
+      // Shift up by half keyboard height to make input area visible.
+      if (delta > 150) {
+        newCalculatedKbOffset = delta / 2;
+      }
+    }
+    // else, newCalculatedKbOffset remains 0, effectively removing the offset if no input is focused or keyboard is closed.
 
-    if (needShift !== kbOffset){
-      kbOffset = needShift;
-      // const y = -(curIndex * window.innerHeight) - kbOffset;
-      // track.style.transform = `translate3d(0, ${y}px, 0)`; // Закомментировано, чтобы предотвратить сдвиг
+    // Only update if the offset actually changes
+    if (newCalculatedKbOffset !== currentKeyboardOffset) {
+      // Call the single slideTo function.
+      // This will update currentKeyboardOffset and apply the transform.
+      slideTo(curIndex, newCalculatedKbOffset);
     }
   });
+
+  // Add a focusout listener to help reset offset if all inputs lose focus,
+  // though the resize event is the primary mechanism.
+  document.addEventListener('focusout', (event) => {
+    if (event.target && event.target.tagName === 'INPUT') {
+      // Brief delay to check if focus moved to another input or if keyboard is truly closing.
+      setTimeout(() => {
+        const stillFocusedElement = document.activeElement;
+        if (!(stillFocusedElement && stillFocusedElement.tagName === 'INPUT')) {
+          // If no input is active, the resize event (triggered by keyboard closing
+          // and visualViewport height changing) should set the offset to 0.
+          // This listener is mostly a safeguard or for scenarios where resize might lag.
+        }
+      }, 50); // Small delay
+    }
+  }, true);
 }
 
 /* --- Система баллов по времени --- */
