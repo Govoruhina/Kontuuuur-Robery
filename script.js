@@ -170,6 +170,7 @@ function checkLevel3() {
 }
 
 /* === Обработка Enter в input === */
+/*
 document.addEventListener("keydown", (e) => {
   if (e.key !== "Enter") return;
   const el = document.activeElement;
@@ -180,6 +181,7 @@ document.addEventListener("keydown", (e) => {
     window[fn]();
   }
 });
+*/
 
 /* === Инициализация === */
 applyTransform();
