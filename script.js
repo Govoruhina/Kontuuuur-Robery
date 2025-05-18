@@ -1,177 +1,85 @@
-const scrollDuration = 1000; // регулировка скрола
+/* ------------ ПАРАМЕТР ПЛАВНОСТИ ------------- */
+const ANIM_MS = 1200;                           // мс – регулировка скорости
 
-function smoothScrollTo(targetY, duration) {
-  const startY = window.scrollY;
-  const distance = targetY - startY;
-  const startTime = performance.now();
+/* ------------ БАЗОВЫЕ ССЫЛКИ ------------- */
+const track  = document.getElementById('track');        // лента
+const levels = Array.from(document.querySelectorAll('.level'));
 
-  function scrollStep(currentTime) {
-    const timeElapsed = currentTime - startTime;
-    const progress = Math.min(timeElapsed / duration, 1);
-    const ease = easeInOutCubic(progress);
-    window.scrollTo(0, startY + distance * ease);
+/* записываем длительность в CSS-переменную */
+track.style.setProperty('--dur', ANIM_MS + 'ms');
 
-    if (progress < 1) {
-      requestAnimationFrame(scrollStep);
-    }
-  }
-
-  requestAnimationFrame(scrollStep);
+/* ------------ ПЛАВНЫЙ СДВИГ ------------- */
+function slideTo(idx){
+  const y = -idx * window.innerHeight;                  // px, не vh
+  track.style.transform = `translate3d(0, ${y}px, 0)`;  // GPU-анимация
 }
 
-function showLevel(id) {
-  const levels = document.querySelectorAll('.level');
-  levels.forEach(level => level.classList.remove('active'));
-
-  const target = document.getElementById(id);
-  if (target) {
-    target.classList.add('active');
-  }
+/* публичная навигация по id */
+function goToLevel(id){
+  const k = levels.findIndex(l => l.id === id);
+  if (k !== -1) slideTo(k);
 }
 
+/* ========== ЛОГИКА УРОВНЕЙ ========== */
 
-function easeInOutCubic(t) {
-  return t < 0.5
-    ? 4 * t * t * t
-    : 1 - Math.pow(-2 * t + 2, 3) / 2;
-}
-
-function startGame() {
-  document.getElementById('intro').style.display = 'none';
-  document.getElementById('level1').classList.remove('locked');
-  showLevel('level1');
-}
-
-function checkLevel1() {
-  const input = document.getElementById('fib-input').value.trim();
-  const feedback = document.getElementById('fib-feedback');
-
-  if (input === "832040") {
-    feedback.textContent = "✅ Правильно! Доступ получен.";
-    feedback.classList.remove("error");
-    feedback.classList.add("success");
-
-    setTimeout(() => {
-      unlockNext(1);
-    }, 1000);
-  } else {
-    feedback.textContent = "❌ Неправильно. Попробуй ещё раз.";
-    feedback.classList.remove("success");
-    feedback.classList.add("error");
+/* --- Уровень 1: Фибоначчи (level2 → level3) --- */
+function checkLevel1(){
+  const val = document.getElementById('fib-input').value.trim();
+  const fb  = document.getElementById('fib-feedback');
+  if(val === "832040"){
+    fb.textContent = '✅ Верно!';
+    fb.className   = 'feedback success';
+    setTimeout(()=>{ goToLevel('level3'); loadLevel2(); }, 800);
+  }else{
+    fb.textContent = '❌ Неверно!';
+    fb.className   = 'feedback error';
   }
 }
 
-
+/* --- Уровень 2: ROT-13 (level3 → level4) --- */
 const cipherTasks = [
-  {
-    encoded: "Y'c q juqfej",
-    answer: "I'm a teapot"
-  },
-  {
-    encoded: "IjqsaEluhvbem",
-    answer: "StackOverFlow"
-  },
-  {
-    encoded: "Mxybu jhku",
-    answer: "While true"
-  },
-  {
-    encoded: "IodjqnUhheh",
-    answer: "SyntaxError"
-  }
+  {encoded:"Y'c q juqfej",  answer:"I'm a teapot"},
+  {encoded:"IjqsaEluhvbem", answer:"StackOverFlow"},
+  {encoded:"Mxybu jhku",    answer:"While true"},
+  {encoded:"IodjqnUhheh",   answer:"SyntaxError"}
 ];
+let task2=null;
 
-let selectedTask2 = null;
-
-function loadLevel2() {
-  selectedTask2 = cipherTasks[Math.floor(Math.random() * cipherTasks.length)];
-  document.getElementById("cipher-question").textContent =
-    "Расшифруй: " + selectedTask2.encoded;
-  document.getElementById("cipher-feedback").textContent = "";
-  document.getElementById("cipher-feedback").className = "feedback";
-  document.getElementById("cipher-input").value = "";
+function loadLevel2(){
+  task2 = cipherTasks[Math.floor(Math.random()*cipherTasks.length)];
+  document.getElementById('cipher-question').textContent =
+      "Расшифруй: " + task2.encoded;
+  document.getElementById('cipher-input').value = "";
+  document.getElementById('cipher-feedback').textContent="";
+  document.getElementById('cipher-feedback').className="feedback";
 }
 
-function checkLevel2() {
-  const input = document.getElementById('cipher-input').value.trim();
-  const feedback = document.getElementById('cipher-feedback');
-  const correct = selectedTask2.answer.toLowerCase();
-
-  if (input.toLowerCase() === correct) {
-    feedback.textContent = "✅ Верно! Уровень пройден.";
-    feedback.classList.remove("error");
-    feedback.classList.add("success");
-    setTimeout(() => {
-      unlockNext(2);
-    }, 1000);
-  } else {
-    feedback.textContent = "❌ Неверно. Попробуй ещё.";
-    feedback.classList.remove("success");
-    feedback.classList.add("error");
+function checkLevel2(){
+  const val = document.getElementById('cipher-input').value.trim().toLowerCase();
+  const ok  = task2.answer.toLowerCase();
+  const fb  = document.getElementById('cipher-feedback');
+  if(val === ok){
+    fb.textContent = '✅ Верно!';
+    fb.className   = 'feedback success';
+    setTimeout(()=>goToLevel('level4'), 800);
+  }else{
+    fb.textContent = '❌ Неверно!';
+    fb.className   = 'feedback error';
   }
 }
 
-function checkLevel3() {
-  const input = document.getElementById('fix-input').value.trim();
-  const feedback = document.getElementById('fix-feedback');
-
-  const correct = "Array.Sort(data);";
-
-  if (input.replace(/\s/g, "") === correct.replace(/\s/g, "")) {
-    feedback.textContent = "✅ Верно! Массив нужно отсортировать перед бинарным поиском.";
-    feedback.classList.remove("error");
-    feedback.classList.add("success");
-    setTimeout(() => {
-      unlockNext(3);
-    }, 1000);
-  } else {
-    feedback.textContent = "❌ Неверно. Подумай, что нужно сделать с массивом.";
-    feedback.classList.remove("success");
-    feedback.classList.add("error");
+/* --- Уровень 3: исправить код (level4 → end) --- */
+function checkLevel3(){
+  const val = document.getElementById('fix-input')
+                       .value.trim().replace(/\s/g,'');
+  const fb  = document.getElementById('fix-feedback');
+  const ok  = "Array.Sort(data);".replace(/\s/g,'');
+  if(val === ok){
+    fb.textContent = '✅ Верно! Массив нужно отсортировать.';
+    fb.className   = 'feedback success';
+    setTimeout(()=>goToLevel('end'), 800);
+  }else{
+    fb.textContent = '❌ Неверно. Подумай над сортировкой.';
+    fb.className   = 'feedback error';
   }
 }
-
-
-function unlockNext(currentLevel) {
-  const nextId = currentLevel === 3 ? 'end' : `level${currentLevel + 1}`;
-  const nextLevel = document.getElementById(nextId);
-  if (nextLevel) {
-    nextLevel.classList.remove('locked');
-    showLevel(nextId);
-    const offsetTop = document.getElementById(nextId).offsetTop;
-    smoothScrollTo(offsetTop, scrollDuration); // показать только нужную секцию
-  }
-
-  if (currentLevel === 1) loadLevel2();
-}
-
-
-
-function restartGame() {
-  const intro = document.getElementById('intro');
-  intro.style.display = 'block';
-
-  const levels = document.querySelectorAll('section');
-  levels.forEach(level => {
-    if (level.id !== 'intro') level.classList.add('locked');
-  });
-
-  document.getElementById('level1').classList.remove('locked');
-
-  // Принудительно обновляем layout
-  setTimeout(() => {
-    window.scrollTo({ top: 0, behavior: 'auto' });
-  }, 50);
-}
-
-
-
-document.addEventListener('wheel', function (e) {
-  const levels = Array.from(document.querySelectorAll('section'));
-  for (let i = 1; i < levels.length; i++) {
-    if (levels[i].classList.contains('locked')) {
-      e.preventDefault();
-      return;
-    }
-  }
-}, { passive: false });
