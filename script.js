@@ -12,7 +12,7 @@ track.style.setProperty('--dur', ANIM_MS + 'ms');
 let curIndex = 0;
 let currentKeyboardOffset = 0;
 let currentIntroScreen = 1;
-const totalIntroScreens = 7;
+const totalIntroScreens = 9; // Total number of intro screens
 
 /* ------------ ОСНОВНАЯ ФУНКЦИЯ ПЛАВНОГО СДВИГА ------------- */
 /* ------------ ФУНКЦИЯ СДВИГА С УСЛОВИЕМ ДЛЯ PNG-ЭКРАНОВ ------------- */
