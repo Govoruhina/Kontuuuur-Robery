@@ -1,61 +1,33 @@
-/* style.css */
-
-/* =========================================================
-   1. Основные настройки и шрифты
-   ========================================================= */
-
-/* Шрифты подключаются в head вашего HTML:
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Montserrat+Alternates:wght@400;700&display=swap" rel="stylesheet">
-*/
-
+/* 1. Базовые настройки */
 html, body {
-  margin: 0;
-  padding: 0;
-  height: 100vh;
-  overflow: hidden;
+  margin: 0; padding: 0;
+  height: 100vh; overflow: hidden;
   font-family: 'Montserrat Alternates', cursive;
 }
 
-/* =========================================================
-   2. Вьюпорт и трек
-   ========================================================= */
-
+/* 2. Вьюпорт и лента */
 .viewport {
-  position: fixed;
-  inset: 0;
-  overflow: hidden;
-  height: 100vh;
+  position: fixed; inset: 0;
+  overflow: hidden; height: 100vh;
 }
-
 .track {
-  height: 100%;
-  will-change: transform;
+  height: 100%; will-change: transform;
   transition: none;
 }
 
-/* =========================================================
-   3. Общий стиль экранов
-   ========================================================= */
-
+/* 3. Экран-уровень */
 .level {
   height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  box-sizing: border-box;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  padding: 20px; box-sizing: border-box;
   background-image: url('images/фон.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
-/* =========================================================
-   4. Intro-экраны 1–9
-   ========================================================= */
-
+/* 4. Intro-экраны 1–9 */
 #introScreen1  { background-image: url('images/экран 1.png'); }
 #introScreen2  { background-image: url('images/экран 2.png'); }
 #introScreen3  { background-image: url('images/экран 3.png'); }
@@ -66,19 +38,13 @@ html, body {
 #introScreen8  { background-image: url('images/экран 8.png'); }
 #introScreen9  { background-image: url('images/экран 9.png'); }
 
-/* =========================================================
-   5. Переходные экраны 10–13
-   ========================================================= */
-
+/* 5. Переходные экраны 10–13 */
 #introScreen10 { background-image: url('images/экран 10.png'); }
 #introScreen11 { background-image: url('images/экран 11.png'); }
 #introScreen12 { background-image: url('images/экран 12.png'); }
 #introScreen13 { background-image: url('images/экран 13.png'); }
 
-/* =========================================================
-   6. Игровые уровни
-   ========================================================= */
-
+/* 6. Игровые уровни */
 #level2 {
   background-image: url('images/фон_1.png');
   background-size: 100% 100%;
@@ -88,107 +54,70 @@ html, body {
   background-size: 100% 100%;
 }
 
-/* =========================================================
-   7. Таймер
-   ========================================================= */
-
+/* 7. Таймер */
 .timer {
-  position: fixed;
-  top: 10px;
-  right: 16px;
+  position: fixed; top: 10px; right: 16px;
   font: 600 1rem/1 monospace;
-  background: #0008;
-  color: #fff;
-  padding: 4px 8px;
-  border-radius: 6px;
-  z-index: 999;
+  background: #0008; color: #fff;
+  padding: 4px 8px; border-radius: 6px;
   pointer-events: none;
 }
 
-/* =========================================================
-   8. Заголовки и текст
-   ========================================================= */
-
+/* 8. Заголовки и текст */
 h1, h2, h3 {
   font-family: 'Press Start 2P', cursive;
 }
-
 p, .feedback {
   font-family: 'Montserrat Alternates', cursive;
   font-size: 24px;
 }
 
-/* =========================================================
-   9. Поля ввода и кнопки
-   ========================================================= */
-
+/* 9. Поля ввода */
 input {
-  padding: 12px;
+  padding: 12px 20px;
   font-size: 1rem;
   margin: 10px 0;
-  width: 80%;
-  max-width: 400px;
-  font-family: 'Montserrat Alternates', cursive;
+  width: 80%; max-width: 400px;
+  border: 2px solid #ccc;
+  border-radius: 30px;
+  outline: none;
 }
 
-button {
-  padding: 10px 20px;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-/* Стили для красной кнопки “Ответить” */
+/* 10. Кнопка «Ответить» */
 .check-button {
   background: url('images/кнопка ответить.png') no-repeat center/contain;
-  border: none;
-  padding: 0;
-  width: 200px;  /* под реальные размеры вашей PNG */
-  height: 60px;  /* под реальные размеры вашей PNG */
-  cursor: pointer;
+  border: none; padding: 0;
+  width: 200px; height: 60px;
   margin-top: 10px;
+  cursor: pointer;
 }
 
-/* =========================================================
-   10. Обратная связь
-   ========================================================= */
-
+/* 11. Обратная связь */
 .feedback {
   margin-top: 10px;
   font-weight: bold;
-  text-align: center;
 }
 .feedback.success { color: green; }
 .feedback.error   { color: red; }
 
-/* =========================================================
-   11. Блок кода
-   ========================================================= */
-
+/* 12. Блок кода */
 .code-block {
-  background: #1e1e1e;
-  color: #dcdcdc;
-  padding: 15px;
-  border-radius: 8px;
+  background: #1e1e1e; color: #dcdcdc;
+  padding: 15px; border-radius: 8px;
   font-family: monospace;
-  width: 90%;
-  max-width: 650px;
+  width: 90%; max-width: 650px;
   overflow-x: auto;
 }
 
-/* =========================================================
-   12. Финальный экран
-   ========================================================= */
-
+/* 13. Финальный экран */
 #finalScreen {
   background-image: url('images/финальная страница.png');
   background-size: cover;
   background-position: center;
 }
-
 .final-score {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   font-family: 'Press Start 2P', cursive;
   font-size: 48px;
@@ -196,11 +125,8 @@ button {
   text-align: center;
 }
 
-/* =========================================================
-   13. Адаптив
-   ========================================================= */
-
+/* 14. Адаптив */
 @media (max-width: 600px) {
   h2 { font-size: 1.2rem; }
-  input, button, .check-button { width: 90%; }
+  input, .check-button { width: 90%; }
 }

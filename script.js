@@ -1,35 +1,35 @@
-/* ------------ БАЗОВЫЕ ССЫЛКИ ------------- */
+// 1. Дефайны и состояние
 const track  = document.getElementById('track');
 const levels = Array.from(document.querySelectorAll('.level'));
-
-/* ------------ ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ------------- */
-let curIndex = 0;
-let currentIntroScreen = 1;
+let curIndex = 0, currentIntroScreen = 1;
 const totalIntroScreens = 9;
 
-/* ------------ ФУНКЦИЯ СДВИГА ------------- */
+// 2. Переход мгновенный
 function slideTo(idx) {
   curIndex = idx;
-  const levelHeight = levels[0]?.offsetHeight || window.innerHeight;
-  track.style.transform = `translate3d(0, ${-idx * levelHeight}px, 0)`;
+  const h = levels[0]?.offsetHeight || window.innerHeight;
+  track.style.transform = `translate3d(0, ${-idx * h}px, 0)`;
 }
 
-/* ------------ ПУБЛИЧНАЯ НАВИГАЦИЯ ПО ID ------------- */
+// 3. Навигация + автозагрузка + финальный счёт
 function goToLevel(id) {
-  const k = levels.findIndex(l => l.id === id);
-  if (k === -1) return;
+  const idx = levels.findIndex(l => l.id === id);
+  if (idx === -1) return;
 
+  // автозагрузка заданий
   if (id === 'level2') loadLevel1();
   if (id === 'level3') loadLevel2();
+
+  // при финальном экране — вывести очки
   if (id === 'finalScreen') {
     stopTimer();
     document.getElementById('score-text').textContent = calcScore();
   }
 
-  slideTo(k);
+  slideTo(idx);
 }
 
-/* ===== ИНТРО-ЭКРАНЫ 1–9 ===== */
+// 4. Intro 1–9
 function nextIntroScreen() {
   if (currentIntroScreen < totalIntroScreens) {
     currentIntroScreen++;
@@ -44,25 +44,19 @@ for (let i = 1; i <= totalIntroScreens; i++) {
           .addEventListener('click', nextIntroScreen);
 }
 
-/* ===== ПЕРЕХОДНЫЕ ЭКРАНЫ 10–13 ===== */
-document.getElementById('introScreen10')
-  .addEventListener('click', () => goToLevel('level3'));
-document.getElementById('introScreen11')
-  .addEventListener('click', () => goToLevel('level4'));
-document.getElementById('introScreen12')
-  .addEventListener('click', () => goToLevel('introScreen13'));
-document.getElementById('introScreen13')
-  .addEventListener('click', () => goToLevel('finalScreen'));
+// 5. Переходные экраны 10–13
+document.getElementById('introScreen10').addEventListener('click', () => goToLevel('level3'));
+document.getElementById('introScreen11').addEventListener('click', () => goToLevel('level4'));
+document.getElementById('introScreen12').addEventListener('click', () => goToLevel('introScreen13'));
+document.getElementById('introScreen13').addEventListener('click', () => goToLevel('finalScreen'));
 
-/* ===== КНОПКИ «ОТВЕТИТЬ» ===== */
+// 6. Кнопки и Enter → проверка
 document.querySelectorAll('button[data-check]').forEach(btn => {
   btn.addEventListener('click', () => {
     const fn = btn.dataset.check;
     if (fn && typeof window[fn] === 'function') window[fn]();
   });
 });
-
-/* ===== Enter → ПОВЕРКА ===== */
 document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && document.activeElement.tagName === 'INPUT') {
     const fn = document.activeElement.dataset.check;
@@ -73,12 +67,22 @@ document.addEventListener('keydown', e => {
   }
 });
 
-/* ========== ЛОГИКА УРОВНЕЙ ========== */
-/* --- Уровень 1: Фибоначчи --- */
+/* ========== Логика уровней ========== */
+
+// Уровень 1: Фибоначчи
 const level1Tasks = [
-  { question: "Введите 30-е число Фибоначчи:", answer: "832040" },
-  { question: "Дана последовательность: 1,11,21,1211,111221,… Следующее?", answer: "13112221" },
-  { question: "Треугольные числа: 1,3,6,10,15,… 6-й член?", answer: "21" }
+  {
+    question : "Введите 30-е число Фибоначчи:",
+    answer   : "832040"
+  },
+  {
+    question : "Дана последовательность: \n1, 11, 21, 1211, 111221, 312211, …",
+    answer   : "13112221"
+  },
+  {
+    question : "Треугольные числа: 1, 3, 6, 10, 15, …\nВведите 6-й член последовательности:",
+    answer   : "21"
+  }
 ];
 let task1;
 function loadLevel1() {
@@ -100,22 +104,21 @@ function checkLevel1() {
   }
 }
 
-/* --- Уровень 2: ROT-13 --- */
+// Уровень 2: ROT-13
 const cipherTasks = [
-  { encoded: "Y'c q juqfej",  answer: "I'm a teapot" },
+  { encoded: "Y'c q juqfej", answer: "I'm a teapot" },
   { encoded: "IjqsaEluhvbem", answer: "StackOverFlow" },
-  { encoded: "Mxybu jhku",    answer: "While true" },
-  { encoded: "IodjqnUhheh",   answer: "SyntaxError" }
+  { encoded: "Mxybu jhku",     answer: "While true" },
+  { encoded: "IodjqnUhheh",    answer: "SyntaxError" }
 ];
 let task2;
-function loadLevel2() {
-  task2 = cipherTasks[Math.floor(Math.random() * cipherTasks.length)];
+function loadLevel2(){
+  task2 = cipherTasks[Math.floor(Math.random()*cipherTasks.length)];
   document.getElementById('cipher-question').textContent =
-    "Зашифрованная фраза: " + task2.encoded;
-  document.getElementById('cipher-input').value = '';
-  const fb = document.getElementById('cipher-feedback');
-  fb.textContent = '';
-  fb.className = 'feedback';
+      "Теперь задача разблокировать компьютер. \nНа экране блокировки выводится фраза и непонятные буквы рядом: \nКаков ответ на главные вопросы жизни и вселенной, \nтаков и ключ для самого известного метода шифрования в 26-тибуквенном алфавите.\nЗашифрованная фраза: " + task2.encoded;
+  document.getElementById('cipher-input').value = "";
+  document.getElementById('cipher-feedback').textContent="";
+  document.getElementById('cipher-feedback').className="feedback";
 }
 function checkLevel2() {
   const val = document.getElementById('cipher-input').value.trim().toLowerCase();
@@ -128,11 +131,11 @@ function checkLevel2() {
   }
 }
 
-/* --- Уровень 3: Исправьте код --- */
+// Уровень 3: Исправьте код
 function checkLevel3() {
-  const val = document.getElementById('fix-input').value.trim().replace(/\s/g, '');
+  const val = document.getElementById('fix-input').value.trim().replace(/\s/g,'');
   const fb  = document.getElementById('fix-feedback');
-  if (val === "Array.Sort(data);".replace(/\s/g, '')) {
+  if (val === "Array.Sort(data);".replace(/\s/g,'')) {
     fb.textContent = '✅ Верно!'; fb.className = 'feedback success';
     setTimeout(() => goToLevel('introScreen12'), 800);
   } else {
@@ -151,8 +154,8 @@ function startTimer() {
 }
 function updateTimer() {
   const sec = Math.floor((Date.now() - startTime) / 1000);
-  const mm  = String(Math.floor(sec / 60)).padStart(2, '0');
-  const ss  = String(sec % 60).padStart(2, '0');
+  const mm  = String(Math.floor(sec / 60)).padStart(2,'0');
+  const ss  = String(sec % 60).padStart(2,'0');
   timerBox.textContent = `${mm}:${ss}`;
 }
 function stopTimer() {
