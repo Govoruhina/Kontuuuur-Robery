@@ -28,6 +28,7 @@ document.addEventListener('keydown', e => {
   const fnName = el.dataset.check;              // значение data-check
   if (fnName && typeof window[fnName] === 'function'){
     window[fnName]();                           // вызываем соответствующую функцию
+    el.blur();                            // убираем фокус с поля ввода
   }
 });
 
@@ -63,6 +64,7 @@ function loadLevel1(){
 
 /* --- новая проверка level1 (level2-экран) --- */
 function checkLevel1(){
+  document.getElementById('fib-input').blur();   // закрыть клаву
   const val = document.getElementById('fib-input').value.trim();
   const fb  = document.getElementById('fib-feedback');
 
@@ -95,6 +97,7 @@ function loadLevel2(){
 }
 
 function checkLevel2(){
+  document.getElementById('cipher-input').blur();   // закрыть клаву
   const val = document.getElementById('cipher-input').value.trim().toLowerCase();
   const ok  = task2.answer.toLowerCase();
   const fb  = document.getElementById('cipher-feedback');
@@ -110,6 +113,7 @@ function checkLevel2(){
 
 /* --- Уровень 3: исправить код (level4 → end) --- */
 function checkLevel3(){
+  document.getElementById('fix-input').blur();   // закрыть клаву
   const val = document.getElementById('fix-input')
                        .value.trim().replace(/\s/g,'');
   const fb  = document.getElementById('fix-feedback');
