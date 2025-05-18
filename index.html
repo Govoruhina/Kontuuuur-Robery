@@ -1,54 +1,58 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Хакерская игра Контура</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Montserrat+Alternates&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Контур Геймификация</title>
+  <!-- Подключаем шрифты -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Montserrat+Alternates:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Таймер -->
-  <div id="timer" class="timer" style="display:none;">00:00</div>
-
-
-  <!-- Видимое «окно»; внутри – лента экранов -->
   <div class="viewport">
-    <div class="track" id="track">
+    <div id="track" class="track">
 
-      <!-- 0. Intro Screens -->
-      <section id="introScreen1" class="level"></section>
-      <section id="introScreen2" class="level"></section>
-      <section id="introScreen3" class="level"></section>
-      <section id="introScreen4" class="level"></section>
-      <section id="introScreen5" class="level"></section>
-      <section id="introScreen6" class="level"></section>
-      <section id="introScreen7" class="level"></section>
-      <section id="introScreen8" class="level"></section>
-      <section id="introScreen9" class="level"></section>
+      <!-- Intro Screens 1–9 -->
+      <div id="introScreen1" class="level"></div>
+      <div id="introScreen2" class="level"></div>
+      <div id="introScreen3" class="level"></div>
+      <div id="introScreen4" class="level"></div>
+      <div id="introScreen5" class="level"></div>
+      <div id="introScreen6" class="level"></div>
+      <div id="introScreen7" class="level"></div>
+      <div id="introScreen8" class="level"></div>
+      <div id="introScreen9" class="level"></div>
 
-      <!-- 1. Фибоначчи → к уровню 2 -->
+      <!-- Level 1: Fibonacci -->
       <section id="level2" class="level">
-        <img src="images/Уровень 1.png" alt="Уровень 1" />
-        <p id="task-question">Загрузка задания…</p>
-        <input id="fib-input" data-check="checkLevel1" placeholder="Введите число">
-        <button onclick="checkLevel1()">Проверить</button>
+        <h2>Уровень 1: Последовательность</h2>
+        <p id="task-question"></p>
+        <input id="fib-input" data-check="checkLevel1" placeholder="Введите ответ">
         <div id="fib-feedback" class="feedback"></div>
+        <button class="check-button" data-check="checkLevel1"></button>
       </section>
 
-      <!-- 2. ROT-13 → к уровню 3 -->
+      <!-- Transition Screen 10 -->
+      <div id="introScreen10" class="level"></div>
+
+      <!-- Level 2: ROT-13 -->
       <section id="level3" class="level">
-        <img src="images/Уровень 2.png" alt="Уровень 2" />
-        <p id="cipher-question">Загрузка задания…</p>
-        <input id="cipher-input" data-check="checkLevel2" placeholder="Введите расшифровку">
-        <button onclick="checkLevel2()">Проверить</button>
+        <h2>Уровень 2: Шифр </h2>
+        <p id="cipher-question"></p>
+        <input id="cipher-input" data-check="checkLevel2" placeholder="Введите ответ">
         <div id="cipher-feedback" class="feedback"></div>
+        <button class="check-button" data-check="checkLevel2"></button>
       </section>
 
-      <!-- 3. Исправить код → финал -->
+      <!-- Transition Screen 11 -->
+      <div id="introScreen11" class="level"></div>
+
+      <!-- Level 3: Fix Code -->
       <section id="level4" class="level">
-        <img src="images/Уровень 3.png" alt="Уровень 3" />
-<pre class="code-block">using System;
+        <h2>Уровень 3: Исправьте код</h2>
+        <pre class="code-block">using System;
 
 class AlmostSecret
 {
@@ -61,22 +65,24 @@ class AlmostSecret
     }
 }</pre>
         <p>Что нужно вставить вместо комментария?</p>
-        <input id="fix-input" data-check="checkLevel3" placeholder="Введите исправление">
-        <button onclick="checkLevel3()">Проверить</button>
+        <input id="fix-input" data-check="checkLevel3" placeholder="Исправьте код">
         <div id="fix-feedback" class="feedback"></div>
+        <button class="check-button" data-check="checkLevel3"></button>
       </section>
 
-      <!-- Финальный экран -->
-      <section id="end" class="level">
-        <h2>Game Over!</h2>
-        <p id="score-text"></p>
-        <p>Nice to see you! Bye-bye 😎</p>
-        <button onclick="stopTimer(); goToLevel('introScreen1')">Играть ещё раз</button>
-      </section>
+      <!-- Transition Screens 12 & 13 -->
+      <div id="introScreen12" class="level"></div>
+      <div id="introScreen13" class="level"></div>
 
-    </div> <!-- /.track -->
-  </div>   <!-- /.viewport -->
+      <!-- Final Screen -->
+      <div id="finalScreen" class="level">
+        <div id="score-text" class="final-score"></div>
+      </div>
 
+    </div>
+  </div>
+
+  <div id="timer" class="timer" style="display:none;"></div>
   <script src="script.js"></script>
 </body>
 </html>

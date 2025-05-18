@@ -1,119 +1,206 @@
-/*  базовая блокировка скролла  */
-html, body{
-  margin:0;
-  padding:0;
-  height:100vh;
-  overflow:hidden;                 /* внешний scroll-bar никогда не появится */
-  font-family:sans-serif;
+/* style.css */
+
+/* =========================================================
+   1. Основные настройки и шрифты
+   ========================================================= */
+
+/* Шрифты подключаются в head вашего HTML:
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Montserrat+Alternates:wght@400;700&display=swap" rel="stylesheet">
+*/
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'Montserrat Alternates', cursive;
 }
 
-/* окно-видоискатель */
-.viewport{
-  position:fixed;   /* ⬅ фикс-слой, браузер его не «катает» */
-  inset:0;
-  overflow:hidden;
-  height:100vh;
+/* =========================================================
+   2. Вьюпорт и трек
+   ========================================================= */
+
+.viewport {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  height: 100vh;
 }
 
-/* лента всех уровней — именно её анимируем */
-.track{
-  height:100%;                     /* ширина = 100% по умолчанию */
-  will-change:transform;           /* переносим на GPU-слой */
-  transition: transform var(--dur, 800ms) cubic-bezier(.33,1,.68,1);
+.track {
+  height: 100%;
+  will-change: transform;
+  transition: none;
 }
 
-/* единичный экран-уровень */
-.level{
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  padding:20px;
-  box-sizing:border-box;
+/* =========================================================
+   3. Общий стиль экранов
+   ========================================================= */
+
+.level {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
   background-image: url('images/фон.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
-#introScreen1 { background-image: url('images/экран 1.png'); }
-#introScreen2 { background-image: url('images/экран 2.png'); }
-#introScreen3 { background-image: url('images/экран 3.png'); }
-#introScreen4 { background-image: url('images/экран 4.png'); }
-#introScreen5 { background-image: url('images/экран 5.png'); }
-#introScreen6 { background-image: url('images/экран 6.png'); }
-#introScreen7 { background-image: url('images/экран 7.png'); }
-#introScreen8 { background-image: url('images/экран 8.png'); }
-#introScreen9 { background-image: url('images/экран 9.png'); }
+/* =========================================================
+   4. Intro-экраны 1–9
+   ========================================================= */
+
+#introScreen1  { background-image: url('images/экран 1.png'); }
+#introScreen2  { background-image: url('images/экран 2.png'); }
+#introScreen3  { background-image: url('images/экран 3.png'); }
+#introScreen4  { background-image: url('images/экран 4.png'); }
+#introScreen5  { background-image: url('images/экран 5.png'); }
+#introScreen6  { background-image: url('images/экран 6.png'); }
+#introScreen7  { background-image: url('images/экран 7.png'); }
+#introScreen8  { background-image: url('images/экран 8.png'); }
+#introScreen9  { background-image: url('images/экран 9.png'); }
+
+/* =========================================================
+   5. Переходные экраны 10–13
+   ========================================================= */
+
+#introScreen10 { background-image: url('images/экран 10.png'); }
+#introScreen11 { background-image: url('images/экран 11.png'); }
+#introScreen12 { background-image: url('images/экран 12.png'); }
+#introScreen13 { background-image: url('images/экран 13.png'); }
+
+/* =========================================================
+   6. Игровые уровни
+   ========================================================= */
 
 #level2 {
   background-image: url('images/фон_1.png');
-  background-size: 100% 100%; /* Stretch to fill container width and height */
+  background-size: 100% 100%;
 }
-
 #level3 {
   background-image: url('images/фон_2.png');
-  background-size: 100% 100%; /* Stretch to fill container width and height */
+  background-size: 100% 100%;
 }
 
-/* Таймер */
-.timer{
-  position:fixed;           /* всегда поверх */
-  top:10px;
-  right:16px;
-  font:600 1rem/1 monospace;
-  background:#0008;         /* полу-прозрачный фон */
-  color:#fff;
-  padding:4px 8px;
-  border-radius:6px;
-  z-index:999;
-  pointer-events:none;      /* клики не ловит */
+/* =========================================================
+   7. Таймер
+   ========================================================= */
+
+.timer {
+  position: fixed;
+  top: 10px;
+  right: 16px;
+  font: 600 1rem/1 monospace;
+  background: #0008;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 6px;
+  z-index: 999;
+  pointer-events: none;
 }
 
-h1,h2,h3{
-  font-family: 'Press Start 2';
+/* =========================================================
+   8. Заголовки и текст
+   ========================================================= */
+
+h1, h2, h3 {
+  font-family: 'Press Start 2P', cursive;
 }
 
-p{
+p, .feedback {
   font-family: 'Montserrat Alternates', cursive;
-  font: size 24px;;
+  font-size: 24px;
 }
 
-/* UI */
-input{
-  padding:12px;
-  font-size:1rem;
-  margin:10px 0;
-  width:80%;
-  max-width:400px;
-}
-button{
-  padding:10px 20px;
-  font-size:1rem;
-  cursor:pointer;
-}
-.feedback{
-  margin-top:10px;
-  font-weight:bold;
-  font-size:1rem;
-  text-align:center;
-}
-.feedback.success{color:green;}
-.feedback.error  {color:red;}
+/* =========================================================
+   9. Поля ввода и кнопки
+   ========================================================= */
 
-.code-block{
-  background:#1e1e1e;
-  color:#dcdcdc;
-  padding:15px;
-  border-radius:8px;
-  font-family:monospace;
-  width:90%;
-  max-width:650px;
-  overflow-x:auto;
+input {
+  padding: 12px;
+  font-size: 1rem;
+  margin: 10px 0;
+  width: 80%;
+  max-width: 400px;
+  font-family: 'Montserrat Alternates', cursive;
 }
 
-@media(max-width:600px){
-  h2{font-size:1.2rem;}
-  input,button{font-size:1rem;width:90%;}
+button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* Стили для красной кнопки “Ответить” */
+.check-button {
+  background: url('images/кнопка ответить.png') no-repeat center/contain;
+  border: none;
+  padding: 0;
+  width: 200px;  /* под реальные размеры вашей PNG */
+  height: 60px;  /* под реальные размеры вашей PNG */
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+/* =========================================================
+   10. Обратная связь
+   ========================================================= */
+
+.feedback {
+  margin-top: 10px;
+  font-weight: bold;
+  text-align: center;
+}
+.feedback.success { color: green; }
+.feedback.error   { color: red; }
+
+/* =========================================================
+   11. Блок кода
+   ========================================================= */
+
+.code-block {
+  background: #1e1e1e;
+  color: #dcdcdc;
+  padding: 15px;
+  border-radius: 8px;
+  font-family: monospace;
+  width: 90%;
+  max-width: 650px;
+  overflow-x: auto;
+}
+
+/* =========================================================
+   12. Финальный экран
+   ========================================================= */
+
+#finalScreen {
+  background-image: url('images/финальная страница.png');
+  background-size: cover;
+  background-position: center;
+}
+
+.final-score {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Press Start 2P', cursive;
+  font-size: 48px;
+  color: #FF2D2D;
+  text-align: center;
+}
+
+/* =========================================================
+   13. Адаптив
+   ========================================================= */
+
+@media (max-width: 600px) {
+  h2 { font-size: 1.2rem; }
+  input, button, .check-button { width: 90%; }
 }
