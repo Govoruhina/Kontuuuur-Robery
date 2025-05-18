@@ -7,6 +7,9 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- Таймер -->
+  <div id="timer" class="timer" style="display:none;">00:00</div>
+
 
   <!-- Видимое «окно»; внутри – лента экранов -->
   <div class="viewport">
@@ -17,14 +20,14 @@
         <h1>Хакерская игра Контура</h1>
         <img src="images/chat_window.png" width="300" height="200" alt="Hacker">
         <p>Проверь свои навыки в программировании и безопасности!</p>
-        <button onclick="goToLevel('level2')">Начать игру</button>
+        <button onclick="startTimer(); loadLevel1(); goToLevel('level2')">Начать игру</button>
       </section>
 
       <!-- 1. Фибоначчи → к уровню 2 -->
       <section id="level2" class="level">
         <h2>Уровень 1: Взлом входа</h2>
-        <p>Введите 30-е число Фибоначчи (ответ — 832040):</p>
-        <input id="fib-input" placeholder="Введите число">
+        <p id="task-question">Загрузка задания…</p>
+        <input id="fib-input" data-check="checkLevel1" placeholder="Введите число">
         <button onclick="checkLevel1()">Проверить</button>
         <div id="fib-feedback" class="feedback"></div>
       </section>
@@ -33,7 +36,7 @@
       <section id="level3" class="level">
         <h2>Уровень 2: Шифр Цезаря (ROT13)</h2>
         <p id="cipher-question">Загрузка задания…</p>
-        <input id="cipher-input" placeholder="Введите расшифровку">
+        <input id="cipher-input" data-check="checkLevel2" placeholder="Введите расшифровку">
         <button onclick="checkLevel2()">Проверить</button>
         <div id="cipher-feedback" class="feedback"></div>
       </section>
@@ -54,7 +57,7 @@ class AlmostSecret
     }
 }</pre>
         <p>Что нужно вставить вместо комментария?</p>
-        <input id="fix-input" placeholder="Введите исправление">
+        <input id="fix-input" data-check="checkLevel3" placeholder="Введите исправление">
         <button onclick="checkLevel3()">Проверить</button>
         <div id="fix-feedback" class="feedback"></div>
       </section>
@@ -62,8 +65,9 @@ class AlmostSecret
       <!-- Финальный экран -->
       <section id="end" class="level">
         <h2>Game Over!</h2>
+        <p id="score-text"></p>
         <p>Nice to see you! Bye-bye 😎</p>
-        <button onclick="goToLevel('level1')">Играть ещё раз</button>
+        <button onclick="stopTimer(); goToLevel('level1')">Играть ещё раз</button>
       </section>
 
     </div> <!-- /.track -->

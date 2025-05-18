@@ -9,9 +9,10 @@ html, body{
 
 /* окно-видоискатель */
 .viewport{
+  position:fixed;   /* ⬅ фикс-слой, браузер его не «катает» */
+  inset:0;
+  overflow:hidden;
   height:100vh;
-  overflow:hidden;                 /* страховка */
-  position:relative;
 }
 
 /* лента всех уровней — именно её анимируем */
@@ -31,6 +32,20 @@ html, body{
   padding:20px;
   box-sizing:border-box;
 }
+/* Таймер */
+.timer{
+  position:fixed;           /* всегда поверх */
+  top:10px;
+  right:16px;
+  font:600 1rem/1 monospace;
+  background:#0008;         /* полу-прозрачный фон */
+  color:#fff;
+  padding:4px 8px;
+  border-radius:6px;
+  z-index:999;
+  pointer-events:none;      /* клики не ловит */
+}
+
 
 /* UI */
 input{
