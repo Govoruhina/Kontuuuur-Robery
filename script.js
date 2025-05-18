@@ -165,7 +165,7 @@ if (window.visualViewport) {
     // newCalculatedKbOffset remains 0 if input not focused or keyboard not significantly open
 
     // Only update if the offset actually changes
-    if (newCalculatedKbOffset !== currentKeyboardOffset) {
+    if (newCalculatedKbOffset !== currentKeyboardOffset || newCalculatedKbOffset === 0) {
       slideTo(curIndex, newCalculatedKbOffset);
     }
   });
