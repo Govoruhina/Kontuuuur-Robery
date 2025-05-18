@@ -17,7 +17,8 @@ function slideTo(idx, keyboardOffsetToApply = currentKeyboardOffset) {
   curIndex = idx;
   currentKeyboardOffset = keyboardOffsetToApply;
 
-  const y = -(curIndex * window.innerHeight) - currentKeyboardOffset;
+  const viewportHeight = document.documentElement.clientHeight;
+  const y = -(curIndex * viewportHeight) - currentKeyboardOffset;
   track.style.transform = `translate3d(0, ${y}px, 0)`;  // GPU-анимация
 }
 
