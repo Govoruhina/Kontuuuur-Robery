@@ -16,26 +16,35 @@ const totalIntroScreens = 9; // Total number of intro screens
 
 /* ------------ ОСНОВНАЯ ФУНКЦИЯ ПЛАВНОГО СДВИГА ------------- */
 /* ------------ ФУНКЦИЯ СДВИГА С УСЛОВИЕМ ДЛЯ PNG-ЭКРАНОВ ------------- */
-function slideTo(idx, keyboardOffsetToApply = currentKeyboardOffset) {
-  // Сохраняем откуда переходим
-  const prevIndex = curIndex;
-  const fromId = levels[prevIndex]?.id || '';
-  const toId   = levels[idx]?.id   || '';
+function slideTo(idx, offset = currentKeyboardOffset, instant = false) {
+  // откуда и куда мы переходим
+  const prevId = levels[curIndex]?.id || '';
+  const nextId = levels[idx]?.id       || '';
 
-  // Если оба — introScreen, делаем мгновенный переход
-  const durationMs = (fromId.startsWith('introScreen') && toId.startsWith('introScreen'))
-    ? 0
-    : ANIM_MS;
-  track.style.setProperty('--dur', durationMs + 'ms');
+  // определяем, нужно ли авто-instant для PNG-экранов
+  const autoInstant = prevId.startsWith('introScreen') 
+                   && nextId.startsWith('introScreen');
 
-  // Сдвигаем
+  // финальная длительность: мгновенно, если флаг или оба PNG; иначе плавно
+  const durMs = (instant || autoInstant) ? 0 : ANIM_MS;
+  track.style.setProperty('--dur', durMs + 'ms');
+
+  // сам сдвиг
   curIndex = idx;
-  currentKeyboardOffset = keyboardOffsetToApply;
+  currentKeyboardOffset = offset;
   const levelHeight = levels[0]
     ? parseFloat(getComputedStyle(levels[0]).height)
     : window.innerHeight;
   const y = -(curIndex * levelHeight) - currentKeyboardOffset;
   track.style.transform = `translate3d(0, ${y}px, 0)`;
+
+  // если был явный instant, сразу возвращаем стандартную скорость
+  if (instant) {
+    // через 0 мс, чтобы следующая трансформация уже плавная
+    setTimeout(() => {
+      track.style.setProperty('--dur', ANIM_MS + 'ms');
+    }, 0);
+  }
 }
 
 /* публичная навигация по id */
