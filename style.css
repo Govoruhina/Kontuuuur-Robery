@@ -31,6 +31,10 @@ html, body{
   align-items:center;
   padding:20px;
   box-sizing:border-box;
+  background-image: url('images/фон.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 /* Таймер */
 .timer{
