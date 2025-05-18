@@ -25,7 +25,7 @@ function slideTo(idx, keyboardOffsetToApply = currentKeyboardOffset) {
 function goToLevel(id){
   const k = levels.findIndex(l => l.id === id);
   if (k !== -1) {
-    slideTo(k); // Now correctly uses the single, enhanced slideTo
+    slideTo(k, 0); // Explicitly set keyboard offset to 0 for new level transitions
   }
 }
 
