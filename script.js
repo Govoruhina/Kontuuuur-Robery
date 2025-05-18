@@ -156,8 +156,8 @@ if (window.visualViewport){
 
     if (needShift !== kbOffset){
       kbOffset = needShift;
-      const y = -(curIndex * window.innerHeight) - kbOffset;
-      track.style.transform = `translate3d(0, ${y}px, 0)`;
+      // const y = -(curIndex * window.innerHeight) - kbOffset;
+      // track.style.transform = `translate3d(0, ${y}px, 0)`; // Закомментировано, чтобы предотвратить сдвиг
     }
   });
 }
