@@ -103,7 +103,7 @@ let task2=null;
 function loadLevel2(){
   task2 = cipherTasks[Math.floor(Math.random()*cipherTasks.length)];
   document.getElementById('cipher-question').textContent =
-      "Расшифруй: " + task2.encoded;
+      "Теперь задача разблокировать компьютер. \nНа экране блокировки выводится фраза и непонятные буквы рядом: \nКаков ответ на главные вопросы жизни и вселенной, \nтаков и ключ для самого известного метода шифрования в 26-тибуквенном алфавите.\nЗашифрованная фраза: " + task2.encoded;
   document.getElementById('cipher-input').value = "";
   document.getElementById('cipher-feedback').textContent="";
   document.getElementById('cipher-feedback').className="feedback";
