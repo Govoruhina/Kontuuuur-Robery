@@ -11,6 +11,8 @@ track.style.setProperty('--dur', ANIM_MS + 'ms');
 /* ------------ ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ДЛЯ СДВИГА ------------- */
 let curIndex = 0;
 let currentKeyboardOffset = 0;
+let currentIntroScreen = 1;
+const totalIntroScreens = 7;
 
 /* ------------ ОСНОВНАЯ ФУНКЦИЯ ПЛАВНОГО СДВИГА ------------- */
 function slideTo(idx, keyboardOffsetToApply = currentKeyboardOffset) {
@@ -29,7 +31,33 @@ function slideTo(idx, keyboardOffsetToApply = currentKeyboardOffset) {
 function goToLevel(id){
   const k = levels.findIndex(l => l.id === id);
   if (k !== -1) {
+    // If navigating to the first actual game level from the last intro screen,
+    // ensure any specific intro logic is handled.
+    if (id === 'level2' && levels[curIndex].id.startsWith('introScreen')) {
+      // Potentially reset intro screen counter or state if needed here
+    }
     slideTo(k, 0); // Explicitly set keyboard offset to 0 for new level transitions
+  }
+}
+
+/* ===== НАВИГАЦИЯ ПО ИНТРО-ЭКРАНАМ ===== */
+function nextIntroScreen() {
+  if (currentIntroScreen < totalIntroScreens) {
+    currentIntroScreen++;
+    goToLevel(`introScreen${currentIntroScreen}`);
+  } else {
+    // Last intro screen, proceed to the first game level
+    startTimer(); 
+    loadLevel1(); 
+    goToLevel('level2');
+  }
+}
+
+// Add click listeners to intro screens
+for (let i = 1; i <= totalIntroScreens; i++) {
+  const introScreen = document.getElementById(`introScreen${i}`);
+  if (introScreen) {
+    introScreen.addEventListener('click', nextIntroScreen);
   }
 }
 
@@ -84,7 +112,10 @@ function checkLevel1(){
   if (val === task1.answer){
     fb.textContent = "✅ Верно!";
     fb.className   = "feedback success";
-    setTimeout(()=>{ goToLevel('level3'); loadLevel2(); }, 800);
+    setTimeout(()=>{ 
+      loadLevel2(); // Load next level's content
+      goToLevel('level3'); // Then navigate
+    }, 800);
   } else {
     fb.textContent = "❌ Неверно!";
     fb.className   = "feedback error";
@@ -237,4 +268,11 @@ function calcScore(){
   const penalty = Math.floor(over / 30);               // каждые 30 с
   return Math.max(0, 10 - penalty);
 }
+
+// Initialize the first intro screen
+document.addEventListener('DOMContentLoaded', () => {
+  goToLevel('introScreen1');
+  // Remove the original button's onclick from HTML if it was on level1, 
+  // as intro screens now handle the start.
+});
 

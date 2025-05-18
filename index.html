@@ -15,13 +15,14 @@
   <div class="viewport">
     <div class="track" id="track">
 
-      <!-- 0. Приветствие → к уровню 1 -->
-      <section id="level1" class="level">
-        <h1>Хакерская игра Контура222</h1>
-        <img src="images/chat_window.png" width="300" height="200" alt="Hacker">
-        <p>Проверь свои навыки в программировании и безопасности!</p>
-        <button onclick="startTimer(); loadLevel1(); goToLevel('level2')">Начать игру</button>
-      </section>
+      <!-- 0. Intro Screens -->
+      <section id="introScreen1" class="level"></section>
+      <section id="introScreen2" class="level"></section>
+      <section id="introScreen3" class="level"></section>
+      <section id="introScreen4" class="level"></section>
+      <section id="introScreen5" class="level"></section>
+      <section id="introScreen6" class="level"></section>
+      <section id="introScreen7" class="level"></section>
 
       <!-- 1. Фибоначчи → к уровню 2 -->
       <section id="level2" class="level">
@@ -67,7 +68,7 @@ class AlmostSecret
         <h2>Game Over!</h2>
         <p id="score-text"></p>
         <p>Nice to see you! Bye-bye 😎</p>
-        <button onclick="stopTimer(); goToLevel('level1')">Играть ещё раз</button>
+        <button onclick="stopTimer(); goToLevel('introScreen1')">Играть ещё раз</button>
       </section>
 
     </div> <!-- /.track -->

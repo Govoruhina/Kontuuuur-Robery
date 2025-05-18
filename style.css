@@ -37,6 +37,14 @@ html, body{
   background-repeat: no-repeat;
 }
 
+#introScreen1 { background-image: url('images/экран 1.png'); }
+#introScreen2 { background-image: url('images/экран 2.png'); }
+#introScreen3 { background-image: url('images/экран 3.png'); }
+#introScreen4 { background-image: url('images/экран 4.png'); }
+#introScreen5 { background-image: url('images/экран 5.png'); }
+#introScreen6 { background-image: url('images/экран 6.png'); }
+#introScreen7 { background-image: url('images/экран 7.png'); }
+
 #level2 {
   background-image: url('images/фон_1.png');
   background-size: 100% 100%; /* Stretch to fill container width and height */
