@@ -36,6 +36,11 @@ html, body{
   background-position: center;
   background-repeat: no-repeat;
 }
+
+#level2 {
+  background-image: url('images/фон_1.png');
+}
+
 /* Таймер */
 .timer{
   position:fixed;           /* всегда поверх */
