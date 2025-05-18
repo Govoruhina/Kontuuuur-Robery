@@ -157,33 +157,25 @@ if (window.visualViewport) {
 
   window.visualViewport.addEventListener('resize', () => {
     const focusedElement = document.activeElement;
-    let newCalculatedKbOffset = 0; // Initialize to 0 for each event
+    let newCalculatedKbOffset = 0;
 
+    // window.innerHeight represents the full height of the layout viewport
     const currentFullHeight = window.innerHeight;
     const visibleHeight = window.visualViewport.height;
+    // Ensure delta is not negative (e.g. if browser UI hides, visualViewport might grow)
     const delta = Math.max(0, currentFullHeight - visibleHeight);
 
     isKeyboardConsideredOpenForScrollingPrevention = (delta > 150); // Heuristic for keyboard
 
+    // Only calculate offset if an input field is focused and keyboard is considered open
     if (focusedElement && focusedElement.tagName === 'INPUT' && isKeyboardConsideredOpenForScrollingPrevention) {
-      const inputRect = focusedElement.getBoundingClientRect();
-      const visualViewportHeight = window.visualViewport.height; // Same as visibleHeight
-
-      if (inputRect.bottom > visualViewportHeight) {
-        // Input's bottom is below the top of the keyboard area. Shift needed.
-        const additionalShiftRequired = inputRect.bottom - visualViewportHeight;
-        newCalculatedKbOffset = currentKeyboardOffset + additionalShiftRequired;
-      } else {
-        // Input's bottom is at or above the top of the keyboard.
-        // Maintain the current offset, as it might be correctly positioned.
-        newCalculatedKbOffset = currentKeyboardOffset;
-      }
+      newCalculatedKbOffset = delta / 2; // Adjust view by half the keyboard/shrinkage height
     }
-    // If the above condition was false (no input focused, or keyboard not considered open),
-    // newCalculatedKbOffset remains 0 (its initial value for this event handler invocation).
-    // This ensures that when the keyboard closes, or focus leaves input, the offset aims for 0.
+    // newCalculatedKbOffset remains 0 if input not focused or keyboard not significantly open,
+    // or if visualViewport grew (delta would be <= 0)
 
     // Only update if the offset actually changes.
+    // This also handles resetting to 0 when keyboard closes (delta becomes small, newCalculatedKbOffset becomes 0)
     if (newCalculatedKbOffset !== currentKeyboardOffset) {
       slideTo(curIndex, newCalculatedKbOffset);
     }
