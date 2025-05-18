@@ -11,14 +11,17 @@ track.style.setProperty('--dur', ANIM_MS + 'ms');
 /* ------------ ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ДЛЯ СДВИГА ------------- */
 let curIndex = 0;
 let currentKeyboardOffset = 0;
-const BASE_VIEWPORT_HEIGHT = document.documentElement.clientHeight; // Capture initial height
 
 /* ------------ ОСНОВНАЯ ФУНКЦИЯ ПЛАВНОГО СДВИГА ------------- */
 function slideTo(idx, keyboardOffsetToApply = currentKeyboardOffset) {
   curIndex = idx;
   currentKeyboardOffset = keyboardOffsetToApply;
 
-  const y = -(curIndex * BASE_VIEWPORT_HEIGHT) - currentKeyboardOffset; // USE BASE_VIEWPORT_HEIGHT
+  // Get the actual computed height of a level. Assumes all levels have the same height.
+  // This should match whatever '100vh' or other CSS height resolves to.
+  // Fallback to window.innerHeight if levels[0] is not available for some reason.
+  const levelHeight = levels[0] ? parseFloat(getComputedStyle(levels[0]).height) : window.innerHeight;
+  const y = -(curIndex * levelHeight) - currentKeyboardOffset;
   track.style.transform = `translate3d(0, ${y}px, 0)`;  // GPU-анимация
 }
 
@@ -156,17 +159,24 @@ if (window.visualViewport) {
     const focusedElement = document.activeElement;
     let newCalculatedKbOffset = 0;
 
-    const delta = window.innerHeight - window.visualViewport.height; // keyboard height
-    isKeyboardConsideredOpenForScrollingPrevention = (delta > 150); // Update keyboard state flag
+    // window.innerHeight represents the full height of the layout viewport
+    const currentFullHeight = window.innerHeight;
+    const visibleHeight = window.visualViewport.height;
+    // Ensure delta is not negative (e.g. if browser UI hides, visualViewport might grow)
+    const delta = Math.max(0, currentFullHeight - visibleHeight);
+
+    isKeyboardConsideredOpenForScrollingPrevention = (delta > 150); // Heuristic for keyboard
 
     // Only calculate offset if an input field is focused and keyboard is considered open
     if (focusedElement && focusedElement.tagName === 'INPUT' && isKeyboardConsideredOpenForScrollingPrevention) {
-      newCalculatedKbOffset = delta / 2; // Calculate offset to shift view
+      newCalculatedKbOffset = delta / 2; // Adjust view by half the keyboard/shrinkage height
     }
-    // newCalculatedKbOffset remains 0 if input not focused or keyboard not significantly open
+    // newCalculatedKbOffset remains 0 if input not focused or keyboard not significantly open,
+    // or if visualViewport grew (delta would be <= 0)
 
-    // Only update if the offset actually changes
-    if (newCalculatedKbOffset !== currentKeyboardOffset) { // Corrected condition
+    // Only update if the offset actually changes.
+    // This also handles resetting to 0 when keyboard closes (delta becomes small, newCalculatedKbOffset becomes 0)
+    if (newCalculatedKbOffset !== currentKeyboardOffset) {
       slideTo(curIndex, newCalculatedKbOffset);
     }
   });
