@@ -169,7 +169,7 @@ if (window.visualViewport) {
 
     // Only calculate offset if an input field is focused and keyboard is considered open
     if (focusedElement && focusedElement.tagName === 'INPUT' && isKeyboardConsideredOpenForScrollingPrevention) {
-      newCalculatedKbOffset = delta / 2; // Adjust view by half the keyboard/shrinkage height
+      newCalculatedKbOffset = delta; // Use the full delta to shift content above keyboard
     }
     // newCalculatedKbOffset remains 0 if input not focused or keyboard not significantly open,
     // or if visualViewport grew (delta would be <= 0)
