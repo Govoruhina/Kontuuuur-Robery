@@ -11,14 +11,14 @@ track.style.setProperty('--dur', ANIM_MS + 'ms');
 /* ------------ ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ДЛЯ СДВИГА ------------- */
 let curIndex = 0;
 let currentKeyboardOffset = 0;
+const BASE_VIEWPORT_HEIGHT = document.documentElement.clientHeight; // Capture initial height
 
 /* ------------ ОСНОВНАЯ ФУНКЦИЯ ПЛАВНОГО СДВИГА ------------- */
 function slideTo(idx, keyboardOffsetToApply = currentKeyboardOffset) {
   curIndex = idx;
   currentKeyboardOffset = keyboardOffsetToApply;
 
-  const viewportHeight = document.documentElement.clientHeight;
-  const y = -(curIndex * viewportHeight) - currentKeyboardOffset;
+  const y = -(curIndex * BASE_VIEWPORT_HEIGHT) - currentKeyboardOffset; // USE BASE_VIEWPORT_HEIGHT
   track.style.transform = `translate3d(0, ${y}px, 0)`;  // GPU-анимация
 }
 
@@ -156,7 +156,7 @@ if (window.visualViewport) {
     const focusedElement = document.activeElement;
     let newCalculatedKbOffset = 0;
 
-    const delta = window.innerHeight - window.visualViewport.height;
+    const delta = window.innerHeight - window.visualViewport.height; // keyboard height
     isKeyboardConsideredOpenForScrollingPrevention = (delta > 150); // Update keyboard state flag
 
     // Only calculate offset if an input field is focused and keyboard is considered open
@@ -166,7 +166,7 @@ if (window.visualViewport) {
     // newCalculatedKbOffset remains 0 if input not focused or keyboard not significantly open
 
     // Only update if the offset actually changes
-    if (newCalculatedKbOffset !== currentKeyboardOffset || newCalculatedKbOffset === 0) {
+    if (newCalculatedKbOffset !== currentKeyboardOffset) { // Corrected condition
       slideTo(curIndex, newCalculatedKbOffset);
     }
   });
