@@ -149,28 +149,33 @@ function checkLevel3(){
 /* ---------- ОБРАБОТКА ИЗМЕНЕНИЯ РАЗМЕРА VIEWPORT (КЛАВИАТУРА) ---------- */
 /* реагируем, когда высота visualViewport меняется */
 if (window.visualViewport) {
+  let isKeyboardConsideredOpenForScrollingPrevention = false; // Flag to track keyboard state
+
   window.visualViewport.addEventListener('resize', () => {
     const focusedElement = document.activeElement;
     let newCalculatedKbOffset = 0;
 
-    // Only calculate offset if an input field is focused
-    if (focusedElement && focusedElement.tagName === 'INPUT') {
-      const delta = window.innerHeight - window.visualViewport.height;
-      // If keyboard is open (delta > ~150px), calculate offset.
-      // Shift up by half keyboard height to make input area visible.
-      if (delta > 150) {
-        newCalculatedKbOffset = delta / 2;
-      }
+    const delta = window.innerHeight - window.visualViewport.height;
+    isKeyboardConsideredOpenForScrollingPrevention = (delta > 150); // Update keyboard state flag
+
+    // Only calculate offset if an input field is focused and keyboard is considered open
+    if (focusedElement && focusedElement.tagName === 'INPUT' && isKeyboardConsideredOpenForScrollingPrevention) {
+      newCalculatedKbOffset = delta / 2; // Calculate offset to shift view
     }
-    // else, newCalculatedKbOffset remains 0, effectively removing the offset if no input is focused or keyboard is closed.
+    // newCalculatedKbOffset remains 0 if input not focused or keyboard not significantly open
 
     // Only update if the offset actually changes
     if (newCalculatedKbOffset !== currentKeyboardOffset) {
-      // Call the single slideTo function.
-      // This will update currentKeyboardOffset and apply the transform.
       slideTo(curIndex, newCalculatedKbOffset);
     }
   });
+
+  // Prevent manual touch scrolling when keyboard is considered open
+  document.body.addEventListener('touchmove', (event) => {
+    if (isKeyboardConsideredOpenForScrollingPrevention) {
+      event.preventDefault();
+    }
+  }, { passive: false }); // passive: false is required for preventDefault to work
 
   // Add a focusout listener to help reset offset if all inputs lose focus,
   // though the resize event is the primary mechanism.
