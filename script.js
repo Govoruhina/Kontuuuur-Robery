@@ -15,16 +15,27 @@ let currentIntroScreen = 1;
 const totalIntroScreens = 7;
 
 /* ------------ ОСНОВНАЯ ФУНКЦИЯ ПЛАВНОГО СДВИГА ------------- */
+/* ------------ ФУНКЦИЯ СДВИГА С УСЛОВИЕМ ДЛЯ PNG-ЭКРАНОВ ------------- */
 function slideTo(idx, keyboardOffsetToApply = currentKeyboardOffset) {
+  // Сохраняем откуда переходим
+  const prevIndex = curIndex;
+  const fromId = levels[prevIndex]?.id || '';
+  const toId   = levels[idx]?.id   || '';
+
+  // Если оба — introScreen, делаем мгновенный переход
+  const durationMs = (fromId.startsWith('introScreen') && toId.startsWith('introScreen'))
+    ? 0
+    : ANIM_MS;
+  track.style.setProperty('--dur', durationMs + 'ms');
+
+  // Сдвигаем
   curIndex = idx;
   currentKeyboardOffset = keyboardOffsetToApply;
-
-  // Get the actual computed height of a level. Assumes all levels have the same height.
-  // This should match whatever '100vh' or other CSS height resolves to.
-  // Fallback to window.innerHeight if levels[0] is not available for some reason.
-  const levelHeight = levels[0] ? parseFloat(getComputedStyle(levels[0]).height) : window.innerHeight;
+  const levelHeight = levels[0]
+    ? parseFloat(getComputedStyle(levels[0]).height)
+    : window.innerHeight;
   const y = -(curIndex * levelHeight) - currentKeyboardOffset;
-  track.style.transform = `translate3d(0, ${y}px, 0)`;  // GPU-анимация
+  track.style.transform = `translate3d(0, ${y}px, 0)`;
 }
 
 /* публичная навигация по id */
